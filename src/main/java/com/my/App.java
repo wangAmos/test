@@ -21,6 +21,7 @@ public class App {
         codeGenerate("sms_send_info");
 
     }
+    
 
     public static void codeGenerate(String tableName) throws Exception {
         ColumnService columnService = new ColumnService();
