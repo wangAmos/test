@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.mapper.SmsSendInfoMapper" >
+	<resultMap id="BaseResultMap" type="com.my.entity.SmsSendInfo" >
+		<result column="id" property="id"/>
+		<result column="phone" property="phone"/>
+		<result column="email" property="email"/>
+		<result column="send_status" property="sendStatus"/>
+		<result column="app_key" property="appKey"/>
+		<result column="send_content" property="sendContent"/>
+		<result column="send_date" property="sendDate"/>
+		<result column="sms_type" property="smsType"/>
+		<result column="parmenter" property="parmenter"/>
+		<result column="code" property="code"/>
+	</resultMap>
+
+	<sql id="Base_Column_List" >
+		 id,phone,email,send_status,app_key,send_content,send_date,sms_type,parmenter,code
+	</sql>
+
+	<sql id="Example_Where_Clause">
+		<where>
+		<if test="id != null and id != ''" >
+			and id =  #{id}
+		</if>
+		<if test="phone != null and phone != ''" >
+			and phone =  #{phone}
+		</if>
+		<if test="email != null and email != ''" >
+			and email =  #{email}
+		</if>
+	<if test="sendStatus != null" >
+			and send_status =  #{sendStatus}
+		</if>
+		<if test="appKey != null and appKey != ''" >
+			and app_key =  #{appKey}
+		</if>
+		<if test="sendContent != null and sendContent != ''" >
+			and send_content =  #{sendContent}
+		</if>
+		<if test="sendDate != null and sendDate != ''" >
+			and send_date =  #{sendDate}
+		</if>
+		<if test="smsType != null and smsType != ''" >
+			and sms_type =  #{smsType}
+		</if>
+		<if test="parmenter != null and parmenter != ''" >
+			and parmenter =  #{parmenter}
+		</if>
+		<if test="code != null and code != ''" >
+			and code =  #{code}
+		</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="Object" >
+				insert into sms_send_info (id,phone,email,send_status,app_key,send_content,send_date,sms_type,parmenter,code) values (#{id},#{phone},#{email},#{sendStatus},#{appKey},#{sendContent},#{sendDate},#{smsType},#{parmenter},#{code})
+	</insert>
+
+	<update id="update" parameterType="Object" >
+		update sms_send_info set id = #{id},phone = #{phone},email = #{email},send_status = #{sendStatus},app_key = #{appKey},send_content = #{sendContent},send_date = #{sendDate},sms_type = #{smsType},parmenter = #{parmenter},code = #{code} where id = #{id}
+	</update>
+
+	<update id="updateBySelective" parameterType="Object" >
+		update sms_send_info 
+	<set>
+	<if test="id != null and id != null">
+		id = #{id},
+	</if>
+	<if test="phone != null and phone != null">
+		phone = #{phone},
+	</if>
+	<if test="email != null and email != null">
+		email = #{email},
+	</if>
+	<if test="sendStatus != null">
+		send_status = #{sendStatus},
+	</if>
+	<if test="appKey != null and appKey != null">
+		app_key = #{appKey},
+	</if>
+	<if test="sendContent != null and sendContent != null">
+		send_content = #{sendContent},
+	</if>
+	<if test="sendDate != null and sendDate != null">
+		send_date = #{sendDate},
+	</if>
+	<if test="smsType != null and smsType != null">
+		sms_type = #{smsType},
+	</if>
+	<if test="parmenter != null and parmenter != null">
+		parmenter = #{parmenter},
+	</if>
+	<if test="code != null and code != null">
+		code = #{code},
+	</if>
+	</set> where id = #{id}
+	</update>
+
+	<delete id="deleteById" parameterType="Object">
+		delete from sms_send_info where id = #{id}
+	</delete>
+
+	<select id="getById"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" /> from sms_send_info where id = #{id}
+	</select>
+
+	<select id="findPageCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from sms_send_info
+		<include refid="Example_Where_Clause"/>
+	</select>
+
+	<select id="findPageList" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from sms_send_info
+		<include refid="Example_Where_Clause"/>
+		<if test="mysqlQueryCondition != null and mysqlQueryCondition != ''" >
+			${mysqlQueryCondition}
+		</if>
+	</select>
+
+	<select id="findBySelective" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from sms_send_info
+		<include refid="Example_Where_Clause"/>
+	</select>
+
+</mapper>   

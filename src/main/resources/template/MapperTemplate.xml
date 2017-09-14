@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${basePackage}.mapper.${className}Mapper" >
+	<resultMap id="BaseResultMap" type="${basePackage}.entity.$!{className}" >
+	#foreach($item in $!{columnDatas})
+	<result column="$!item.columnName" property="$item.propertyName"/>
+	#end
+</resultMap>
+
+	<sql id="Base_Column_List" >
+		 $!{SQL.columnFields}
+	</sql>
+
+	<sql id="Example_Where_Clause">
+		<where>
+#foreach($item in $!{columnDatas})
+	#set($testStr = $!item.propertyName + " != null")
+	#if($!item.dataType == 'String')
+		#set($testStr = $!testStr + " and " + $!item.propertyName + " != ''")
+	#end
+<if test="$!testStr" >
+			and $!item.columnName =  #{$!item.propertyName}
+		</if>
+#end
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="Object" >
+		#if  ($keyType =='02')
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		#end
+		$!{SQL.insert}
+	</insert>
+
+	<update id="update" parameterType="Object" >
+		$!{SQL.update}
+	</update>
+
+	<update id="updateBySelective" parameterType="Object" >
+		$!{SQL.updateSelective}
+	</update>
+
+	<delete id="deleteById" parameterType="Object">
+		$!{SQL.deleteById}
+	</delete>
+
+	<select id="getById"  resultMap="BaseResultMap" parameterType="Object">
+		$!{SQL.getById}
+	</select>
+
+	<select id="findPageCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from ${tableName}
+		<include refid="Example_Where_Clause"/>
+	</select>
+
+	<select id="findPageList" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from ${tableName}
+		<include refid="Example_Where_Clause"/>
+		<if test="mysqlQueryCondition != null and mysqlQueryCondition != ''" >
+			${mysqlQueryCondition}
+		</if>
+	</select>
+
+	<select id="findBySelective" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from ${tableName}
+		<include refid="Example_Where_Clause"/>
+	</select>
+
+</mapper>   
